@@ -21,6 +21,7 @@ public class ArabicHandler implements Handler{
         if (a < 1 || a > 10 || b < 1 || b > 10) {
             throw new RuntimeException("Попробуй числа от 1 до 10");
         }
+
         String result = null;
 
         switch (matcher.group(2)) {

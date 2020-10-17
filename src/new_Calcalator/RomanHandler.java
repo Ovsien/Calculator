@@ -1,49 +1,54 @@
 package new_Calcalator;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RomanHandler implements Handler {
-    Pattern pattern;
+public class RomanHandler implements Handler{
+    private Pattern pattern;
 
+    @Override
     public void setPattern(Pattern pattern) {
         this.pattern = pattern;
     }
 
-    String result = null;
+    @Override
+    public String execute(String roman) {
+        Matcher matcher = pattern.matcher(roman);
 
-    public String execute(String roman){
-            Matcher matcher = pattern.matcher(roman);
+        matcher.matches();
 
-            matcher.matches();
+        String romeNumOne = matcher.group(1);
+        String romeNumTwo = matcher.group(3);
 
-            int s1 = Integer.parseInt(matcher.group(1));
-            int s2 = Integer.parseInt(matcher.group(3));
+        RomeToArabic conv = new RomeToArabic();
 
-            Map<String, Integer> map = new HashMap<>();
-            map.put("X", 10);
-            map.put("V", 5);
-            map.put("I", 1);
+        int arOne = conv.romeToArabic(romeNumOne);
+        int arTwo = conv.romeToArabic(romeNumTwo);
 
+        ArabicToRome arToRom = new ArabicToRome();
+
+        if (arOne < 1 || arOne > 10 || arTwo < 1 || arTwo > 10) {
+            throw new RuntimeException("Попробуй числа от I до X");
+        }
+        int result = 0;
 
         switch (matcher.group(2)) {
             case "+":
-                result = String.valueOf(s1 + s2);
+                result = (arOne + arTwo);
                 break;
             case "-":
-                result = String.valueOf(s1 - s2);
+                result = (arOne - arTwo);
                 break;
             case "*":
-                result = String.valueOf(s1 * s2);
+                result = (arOne * arTwo);
                 break;
             case "/":
-                result = String.valueOf(s1 / s2);
+                result = (arOne / arTwo);
                 break;
         }
-
-
-            return result;
+        if (result < 0){
+            throw new RuntimeException("У римских числен нет отрицательных чисел");
+        }
+        return arToRom.arabicToRome(result);
     }
 }
